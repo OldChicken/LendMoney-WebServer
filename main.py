@@ -17,7 +17,7 @@ router = [
     (r"/login", userauthor.login.LoginRequestHandler),
     # 注册
     (r"/register", userauthor.register.RegisterHandler),
-	(r"/getcode", userauthor.getcode.getcode)
+	(r"/getcode", userauthor.getcode.GetCode)
 ]
 
 def main():

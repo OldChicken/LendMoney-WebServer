@@ -7,10 +7,9 @@
 class RedisHandler(object):
     """
     Reids client
-    """
-    
-	def redis_conn(self)
-		self.redis_conn = redis.Redis(host='localhost', port='6379',password='')
+    """    
+    def redis_conn(self):
+	    self.redis_conn = redis.Redis(host='localhost', port='6379',password='')
 	
     def __init__(self, name, host, port):
         """
@@ -91,4 +90,5 @@ class RedisHandler(object):
  
     def changeTable(self, name):
         self.name = name
+    
 

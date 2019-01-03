@@ -7,14 +7,14 @@ from tornado.httpclient import AsyncHTTPClient, HTTPRequest
 import json
  
 from tornado import web
-from forms import SmsForm
+from userauthor.forms import SmsForm
 from random import choice
 import os.path
 import torndb
 import tornado.httpserver
 import tornado.ioloop
 import tornado.options 
-import redis_handler
+from dbmanager.RedisHandler import RedisHandler
 
 #生成注册验证码
 class GetCode(RedisHandler):

@@ -9,8 +9,8 @@ import tornado.web
 import json
 import dbmanager.mysqlmanager
 import userauthor.getcode
-import dbmanager.RedisHandler
-from forms import SmsForm
+from dbmanager.RedisHandler import RedisHandler
+from userauthor.forms import SmsForm
 
 # 注册请求类
 class RegisterHandler(RedisHandler):
