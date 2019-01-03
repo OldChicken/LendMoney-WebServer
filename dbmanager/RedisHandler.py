@@ -4,11 +4,14 @@
 # In[ ]:
 
 
-class RedisClient(object):
+class RedisHandler(object):
     """
     Reids client
     """
- 
+    
+	def redis_conn(self)
+		self.redis_conn = redis.Redis(host='localhost', port='6379',password='')
+	
     def __init__(self, name, host, port):
         """
         init

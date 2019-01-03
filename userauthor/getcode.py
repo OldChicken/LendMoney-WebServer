@@ -14,9 +14,10 @@ import torndb
 import tornado.httpserver
 import tornado.ioloop
 import tornado.options 
+import redis_handler
 
 #生成注册验证码
-class GetCode(tornado.web.RequestHandler):
+class GetCode(RedisHandler):
     def create_code(self):
         # 创建四位数短信验证码
         seeds = '01234566789'
@@ -29,7 +30,7 @@ class GetCode(tornado.web.RequestHandler):
         phone = self.get_body_argument("user_phone")
         tp = self.get_body_argument("type")
         code = self.create_code()
-        text = {'user_phone':phone,'type':'您的验证码为' + code}
+        text = {'user_phone':phone,'content':'您的验证码为' + code}
         resp = json.dumps(text)
         self.redis_conn.set('{}_{}'.format(mobile, code), 1, 5*60)
         self.write(resp)
