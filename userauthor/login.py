@@ -3,7 +3,8 @@
 
 import tornado.web
 import json
-import dbmanager.mysqlmanager
+from dbmanager.mysqlmanager import mysqlhandler
+
 
 # 登录请求类
 class LoginRequestHandler(tornado.web.RequestHandler):
@@ -26,30 +27,5 @@ class LoginRequestHandler(tornado.web.RequestHandler):
         self.set_header('Content-Type', 'application/json;charset=utf-8')
 
 
-    # 数据库匹配,成功后返回成功信息
-    def matchUser(self, account, password):
-        print('account', account)
-        print('password', password)
-        if dbmanager.mysqlmanager.matchUser(account, password) == True:
-            resp = {
-                'data': {
-                    'account': account,
-                    'password': password
-                },
-                'msg': {
-                    'success': '1',
-                    'msg': 'login success!'
-                }
-            }
-        else:
-            resp = {
-                'data': {
-                },
-                'msg': {
-                    'success': '0',
-                    'msg': 'login failed!'
-                }
-            }
-        return resp
 
 
