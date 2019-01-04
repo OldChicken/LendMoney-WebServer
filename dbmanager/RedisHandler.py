@@ -21,6 +21,7 @@ class RedisHandler(object):
         """
         self.name = name
         self.__conn = redis.Redis(host=host, port=port, db=0)
+
  
     def get(self):
         """
