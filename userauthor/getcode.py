@@ -14,7 +14,7 @@ import torndb
 import tornado.httpserver
 import tornado.ioloop
 import tornado.options 
-from dbmanager.RedisHandler import RedisHandler
+from dbmanager.redismanager import RedisHandler
 import redis
 
 #生成注册验证码

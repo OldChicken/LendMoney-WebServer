@@ -9,7 +9,7 @@ import tornado.web
 import json
 from dbmanager.mysqlmanager import MysqlHandler
 import userauthor.getcode
-from dbmanager.RedisHandler import RedisHandler
+from dbmanager.redismanager import RedisHandler
 from userauthor.forms import SmsForm
 import redis
 
@@ -41,10 +41,10 @@ class RegisterHandler(tornado.web.RequestHandler):
         if valid_code:
             sqlmanager = MysqlHandler()
             result = await sqlmanager.searchUser(mobile)
-            if result == '1':
+            if result:
                 self.set_status(400)
                 re_data['mobile'] = '用户已经存在'
-            elif result =='0':
+            else:
                 await sqlmanager.addUser(mobile,password)
                 self.set_status(201)
  

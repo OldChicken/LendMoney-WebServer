@@ -9,24 +9,36 @@ from dbmanager.mysqlmanager import MysqlHandler
 # 登录请求类
 class LoginRequestHandler(tornado.web.RequestHandler):
 
-    def get(self):
-
-        account = self.get_argument("account")
-        password = self.get_argument("password")
-        sqlmanager = MysqlHandler()
-        resp = sqlmanager.matchUser(account, password)
-        self.write(json.dumps(resp, indent=2))
-        self.set_header('Content-Type', 'application/json;charset=utf-8')
-
-
-    def post(self):
+    async def post(self):
 
         account = self.get_body_argument("account")
         password = self.get_body_argument("password")
-        sqlmanager = MysqlHandler()
-        resp = sqlmanager.matchUser(account, password)
-        self.write(json.dumps(resp, indent=2))
-        self.set_header('Content-Type', 'application/json;charset=utf-8')
+        # account = form.mobile.data
+        # password = form.password.data
+        re_data = {}
+        try:
+            user = await self.application.objects.get(User, mobile=mobile)
+            if user.password.check_password(password):
+                data = {
+                'id':user.id,
+                'nick_name':user.nick_name,
+                'exp':datetime.utcnow()
+                }
+                # 生成json web token
+                token = jwt.encode(data, self.settings['secret_key'], algorithm='HS256')
+                re_data['id'] = user.id
+                re_data['token'] = token.decode('utf8')
+ 
+            else:
+                self.set_status(400)
+                re_data['non_fields'] = '用户名或者密码错误'
+ 
+        except User.DoseNotExist:
+            self.set_status(400)
+            re_data['mobile'] = '用户不存在'
+
+
+        self.finish(re_data)
 
 
 

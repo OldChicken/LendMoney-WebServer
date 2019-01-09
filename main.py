@@ -6,7 +6,7 @@ import tornado.options
 import userauthor.register
 import userauthor.login
 import ssl
-
+import pandas
 from tornado.options import define, options
 define("port", default=1024, help="run on the given port", type=int)
 # template_path = os.path.join(os.path.dirname(__file__), "API")
@@ -14,7 +14,7 @@ define("port", default=1024, help="run on the given port", type=int)
 # 路由
 router = [
     # 登录
-    (r"/login", userauthor.login.LoginRequestHandler),
+    # (r"/login", userauthor.login.LoginRequestHandler),
     # 注册
     (r"/register", userauthor.register.RegisterHandler),
 	(r"/getcode", userauthor.getcode.GetCode)
@@ -22,6 +22,7 @@ router = [
 
 def main():
     print('start web server!')
+
     # 监听命令行
     tornado.options.parse_command_line()
     # app = tornado.web.Application(router, template_path)

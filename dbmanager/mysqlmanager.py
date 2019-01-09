@@ -1,7 +1,6 @@
 import torndb
 import tornado
 
-
 class MysqlHandler(object):
 
 	async def matchUser(self,account,password):
@@ -33,17 +32,13 @@ class MysqlHandler(object):
 		return resp
 
 	async def searchUser(self,account):
-		""" 从数据库查找用户
+		""" 从数据库搜索用户
 		@ account：用户手机号
 		@ return： True/Fase
 		"""
 		db = torndb.Connection(host='localhost', database='pay_loan', user='root', password='')
-		phone_in_db = db.get('select user_phone from register_info where user_phone=%s', account)
-		if phone_in_db:
-			resp = '1'
-		else:
-			resp = '0'
-		return resp
+		phone_in_db = db.get('select * from register_info where user_phone=%s', account)
+		return phone_in_db
 
 	async def addUser(self,account,password):
 		#往数据库表中添加新的用户
