@@ -2,60 +2,56 @@ import torndb
 import tornado
 
 
+class MysqlHandler(object):
 
-class mysqlhandler(object):
-	def matchUser(account,password):
+	async def matchUser(self,account,password):
 		""" 从数据库查找用户
 		@ account：帐号
 		@ password: 密码
 		@ return：True/Fase
 		"""
-		db = torndb.Connection(host='localhost',database='pay_loan',user='root',password='')
-		phone_in_db = db.get('select user_phone from register_info where user_phone=%s',account)
-		password_in_db = db.get('select password from register_info where user_phone=%s',account)
+		db = torndb.Connection(host='localhost', database='pay_loan', user='root', password='')
+		phone_in_db = db.get('select user_phone from register_info where user_phone=%s', account)
+		password_in_db = db.get('select password from register_info where user_phone=%s', account)
 		if phone_in_db == account:
-			map_key='1'
+			map_key = '1'
 		else:
-			map_key='0'
+			map_key = '0'
 		if password_in_db == password:
-			map_key2='1'
+			map_key2 = '1'
 		else:
-			map_key2='0'
-		key = map_key+map_key2
-		if key=='01':
-			resp = {'error':'Phone_number not exists!'}
-		elif key=='00':
-			resp = {'error':'Phone_number not exists!'}
-		elif key=='10':
-			resp = {'error':'password not correct!'}
-		elif key=='11':
-			resp = {'error':'password not correct!'}		
+			map_key2 = '0'
+		key = map_key + map_key2
+		if key == '01':
+			 resp = {'error': 'Phone_number not exists!'}
+		elif key == '00':
+			resp = {'error': 'Phone_number not exists!'}
+		elif key == '10':
+			resp = {'error': 'password not correct!'}
+		elif key == '11':
+			resp = {'error': 'password not correct!'}
 		return resp
 
-
-
-
-	def searchUser(account):
+	async def searchUser(self,account):
 		""" 从数据库查找用户
 		@ account：用户手机号
 		@ return： True/Fase
 		"""
-		db = torndb.Connection(host='localhost',database='pay_loan',user='root',password='')
-		phone_in_db = db.get('select user_phone from register_info where user_phone=%s',account)
+		db = torndb.Connection(host='localhost', database='pay_loan', user='root', password='')
+		phone_in_db = db.get('select user_phone from register_info where user_phone=%s', account)
 		if phone_in_db:
-			return True
+			resp = '1'
 		else:
-			return False
+			resp = '0'
+		return resp
 
-
-
-	def addNewUser(account,password):
-		# 往数据库表中添加新的用户
-		db = torndb.Connection(host='localhost',database='pay_loan',user='root',password='')
-		phone_in_db = db.get('select user_phone from register_info where user_phone=%s',account)
+	async def addUser(self,account,password):
+		#往数据库表中添加新的用户
+		db = torndb.Connection(host='localhost', database='pay_loan', user='root', password='')
+		phone_in_db = db.get('select user_phone from register_info where user_phone=%s', account)
 		if phone_in_db:
-			resp={'error':'Phone_number already exists!'}
+			resp = {'error': 'Phone_number already exists!'}
 		else:
-			resp={'user_phone':account,'Password':password}
-			db.execute('insert into register_info(user_phone,password) values(%s,%s)',account,password)
+			resp = {'user_phone': account, 'Password': password}
+			db.execute('insert into register_info(user_phone,password) values(%s,%s)', account, password)
 		return resp

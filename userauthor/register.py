@@ -7,7 +7,7 @@ import tornado.ioloop
 import tornado.options
 import tornado.web
 import json
-import dbmanager.mysqlmanager
+from dbmanager.mysqlmanager import MysqlHandler
 import userauthor.getcode
 from dbmanager.RedisHandler import RedisHandler
 from userauthor.forms import SmsForm
@@ -30,7 +30,7 @@ class RegisterHandler(tornado.web.RequestHandler):
             self.set_status(400)
             re_data['code'] = '验证码过期'
  
-        if code_result == 1:
+        if code_result == b'1':
             valid_code = True
         else:
             self.set_status(400)
@@ -39,13 +39,14 @@ class RegisterHandler(tornado.web.RequestHandler):
  
         # 验证号码是否注册
         if valid_code:
-            result = await self.searchUser(mobile)
-            if result:
+            sqlmanager = MysqlHandler()
+            result = await sqlmanager.searchUser(mobile)
+            if result == '1':
                 self.set_status(400)
                 re_data['mobile'] = '用户已经存在'
-            else:
-                await self.addNewUser(mobile,password)
-                elf.set_status(201)
+            elif result =='0':
+                await sqlmanager.addUser(mobile,password)
+                self.set_status(201)
  
         self.finish(re_data)
 
