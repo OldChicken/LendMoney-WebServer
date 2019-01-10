@@ -37,7 +37,7 @@ class MysqlHandler(object):
 		@ return： True/Fase
 		"""
 		db = torndb.Connection(host='localhost', database='pay_loan', user='root', password='')
-		phone_in_db = db.get('select * from register_info where user_phone=%s', account)
+		phone_in_db = db.query('select * from register_info where user_phone=%s', account)
 		return phone_in_db
 
 	async def addUser(self,account,password):

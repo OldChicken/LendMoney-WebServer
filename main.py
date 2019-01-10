@@ -14,7 +14,7 @@ define("port", default=1024, help="run on the given port", type=int)
 # 路由
 router = [
     # 登录
-    # (r"/login", userauthor.login.LoginRequestHandler),
+    (r"/login", userauthor.login.LoginRequestHandler),
     # 注册
     (r"/register", userauthor.register.RegisterHandler),
 	(r"/getcode", userauthor.getcode.GetCode)

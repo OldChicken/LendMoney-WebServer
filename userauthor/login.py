@@ -4,6 +4,9 @@
 import tornado.web
 import json
 from dbmanager.mysqlmanager import MysqlHandler
+from dbmanager.user import UserInfo
+import datetime
+import jwt
 
 
 # 登录请求类
@@ -16,26 +19,27 @@ class LoginRequestHandler(tornado.web.RequestHandler):
         # account = form.mobile.data
         # password = form.password.data
         re_data = {}
-        try:
-            user = await self.application.objects.get(User, mobile=mobile)
-            if user.password.check_password(password):
+        userdata = UserInfo()
+        user = await userdata.getUser(account)
+        if user:
+            valid_code = await user.check_password(account,password) 
+            if valid_code:
                 data = {
                 'id':user.id,
-                'nick_name':user.nick_name,
-                'exp':datetime.utcnow()
+                'nick_name':user.user_phone,
+                'exp':datetime.datetime.utcnow()
                 }
                 # 生成json web token
-                token = jwt.encode(data, self.settings['secret_key'], algorithm='HS256')
+                token = jwt.encode(data, 'secret_key', algorithm='HS256')
                 re_data['id'] = user.id
                 re_data['token'] = token.decode('utf8')
  
             else:
                 self.set_status(400)
                 re_data['non_fields'] = '用户名或者密码错误'
- 
-        except User.DoseNotExist:
+        else:
             self.set_status(400)
-            re_data['mobile'] = '用户不存在'
+            re_data['account'] = '用户不存在'
 
 
         self.finish(re_data)
