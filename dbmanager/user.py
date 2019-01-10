@@ -22,11 +22,14 @@ class UserInfo(object):
         manager = MysqlHandler()
         userinfo_db = await manager.searchUser(account)
         userinfo = UserInfo()
-        userinfo_data = userinfo_db[0]
-        userinfo.id = userinfo_data["id"]
-        userinfo.user_phone = userinfo_data["user_phone"]
-        userinfo.password = userinfo_data["Password"]
-        return userinfo
+        if userinfo_db:
+            userinfo_data = userinfo_db[0]
+            userinfo.id = userinfo_data["id"]
+            userinfo.user_phone = userinfo_data["user_phone"]
+            userinfo.password = userinfo_data["Password"]
+            return userinfo
+        else:
+            return False
     @classmethod
     async def check_password(cls,account,password):
         manager = MysqlHandler()
